@@ -31,10 +31,10 @@ class km_Main
  
         // Display the form, using the current value.
         ?>
-        <label for="kbn_publish">
+        <!--<label for="kbn_publish">
             <?php _e( 'Publier sur Koban', 'publish' ); ?>
         </label>
-        <input type="checkbox" id="kbn_publish" name="kbn_publish" <?php if( $value == "on" ) { ?>checked="checked"<?php } ?> />
+        <input type="checkbox" id="kbn_publish" name="kbn_publish" <?php if( $value == "on" ) { ?>checked="checked"<?php } ?> />-->
         <?php
 	}
 	public function save_box_koban( $post_id )
@@ -98,6 +98,10 @@ class km_Main
 		<form method='post' action='options.php'>
 			<?php settings_fields('kobanmkg_settings') ?>
 			<div>
+				<label style="width:25%;display:inline-block;text-align:right;padding-right:20px">Votre serveur Koban (URL complète)</label>
+				<input style="width:40%" type='text' name='kobanmkg_server' value="<?php echo get_option('kobanmkg_server') ?>" />
+			</div>
+			<div>
 				<label style="width:25%;display:inline-block;text-align:right;padding-right:20px">Votre clé API</label>
 				<input style="width:40%" type='text' name='kobanmkg_apikey' value="<?php echo get_option('kobanmkg_apikey') ?>" />
 			</div>
@@ -116,16 +120,17 @@ class km_Main
 	
 	public function register_settings()
 	{
+		register_setting('kobanmkg_settings', 'kobanmkg_server');
 		register_setting('kobanmkg_settings', 'kobanmkg_apikey');
 		register_setting('kobanmkg_settings', 'kobanmkg_apiusr');
 		register_setting('kobanmkg_settings', 'kobanmkg_ssl');
 	}
 	
 	public function add_koban_tracking(){
-		$url = "http://track.itsonlyleads.com/libapi/kobantracker.js";
+		$url = get_option('kobanmkg_server')."/libapi/kobantracker.js";
 		if( get_option('kobanmkg_apikey') != null && get_option('kobanmkg_apikey') != "" ) {
 			if (get_option('kobanmkg_ssl') == "Y"){
-				$url = "https://addin-koban.com:444/libapi/kobantracker-s.js";
+				$url = get_option('kobanmkg_server')."/libapi/kobantracker-s.js";
 			}
         ?>
         <script type='text/javascript'>(function (i, s, o, g, r, a, m) {
